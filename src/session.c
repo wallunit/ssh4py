@@ -895,7 +895,9 @@ session_get_timeout(SSH2_SessionObj *self, void *closure)
 static int
 session_set_timeout(SSH2_SessionObj *self, PyObject *value, void *closure)
 {
-	if (!PyInt_Check(value) && !PyLong_Check(value)) {
+	long timeout = PyLong_AsLong(value);
+
+	if (timeout == -1 && PyErr_Occurred()) {
 		PyErr_SetString(PyExc_TypeError, "must be integer");
 		return -1;
 	}
