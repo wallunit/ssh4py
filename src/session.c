@@ -898,11 +898,13 @@ session_set_timeout(SSH2_SessionObj *self, PyObject *value, void *closure)
 	long timeout = PyLong_AsLong(value);
 
 	if (timeout == -1 && PyErr_Occurred()) {
-		PyErr_SetString(PyExc_TypeError, "must be integer");
+		/* older versions of python don't set TypeError */
+		if (PyErr_ExceptionMatches(PyExc_SystemError))
+			PyErr_SetString(PyExc_TypeError, "an integer is required");
 		return -1;
 	}
 
-	libssh2_session_set_timeout(self->session, PyLong_AsLong(value));
+	libssh2_session_set_timeout(self->session, timeout);
 	return 0;
 }
 #endif
