@@ -609,4 +609,3 @@ init_SSH2_SFTP(PyObject *module)
 	Py_DECREF(&SSH2_SFTP_Type);
 	return -1;
 }
-
